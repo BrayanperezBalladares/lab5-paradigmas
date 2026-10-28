@@ -21,7 +21,7 @@ S7. The final package must follow the assignment instruction not to upload Word 
 ## Tasks
 
 - T1 — S4 — inline — complete — RED: integration setup timed out on the first run; GREEN: 3 consecutive integration runs passed, 25 unit tests passed, and 3 Playwright tests passed.
-- T2 — S2, S3, S7 — inline — pending — evidence files and repository locator.
+- T2 — S2, S3, S7 — inline — complete — five standalone JPG files created under `evidencias/`; `repositorio.txt` contains the GitHub repository URL.
 - T3 — S5 — inline — pending — harness publication and combined-verification readiness.
 - T4 — S6 — inline — pending — repository hygiene, full verification, and final local package audit.
 
@@ -34,3 +34,5 @@ L2. Initial audit: the Word document contains evidence 1–4 and Snyk screenshot
 L3. Engram mirror pending because the workspace has no configured Engram project key.
 
 L4. Stabilized the integration setup with a 10-second hook timeout. Verification observed three consecutive integration passes, 25 passing unit tests, and 3 passing Playwright tests.
+
+L5. Created `evidencias/evidencia-1-inyeccion.jpg` through `evidencia-5-snyk.jpg`. Browser-rendered evidence uses a 1600×900 viewport; the original injection capture is preserved at 955×971. Created `repositorio.txt` with the required GitHub URL.
