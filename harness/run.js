@@ -41,8 +41,13 @@ function prepare() {
   for (const req of requirements) {
     const branch = `harness/${req.id.toLowerCase()}-${req.slug}`;
     const worktree = path.join(worktreesRoot, req.slug);
+    const stateFile = path.join(stateRoot, `${req.id}.json`);
     if (!fs.existsSync(worktree)) {
       git(['worktree', 'add', '-b', branch, worktree, base]);
+    }
+    if (fs.existsSync(stateFile)) {
+      const state = JSON.parse(fs.readFileSync(stateFile, 'utf8'));
+      if (state.phase === 'committed' || state.phase === 'pull-request-created') continue;
     }
 
     write(path.join(worktree, 'openspec', 'changes', req.slug, 'spec.md'), specFor(req));
@@ -98,6 +103,7 @@ function command(req, phase, commandText) {
 async function runRequirement(req) {
   const stateFile = path.join(stateRoot, `${req.id}.json`);
   const state = JSON.parse(fs.readFileSync(stateFile, 'utf8'));
+  if (state.phase === 'committed' || state.phase === 'pull-request-created') return state;
   if (await command(req, 'judge-red', req.redCommand)) {
     throw new Error(`${req.id}: test did not fail before implementation`);
   }
@@ -110,6 +116,16 @@ async function runRequirement(req) {
   state.testResult = 'passed';
   state.verification = 'passed';
   state.phase = 'verified';
+  git(['add', 'openspec', 'harness'], state.worktree);
+  git([
+    'commit',
+    '-m',
+    `${req.id}: implement requirement`,
+    '-m',
+    'Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>'
+  ], state.worktree);
+  state.commit = git(['rev-parse', 'HEAD'], state.worktree);
+  state.phase = 'committed';
   fs.writeFileSync(stateFile, JSON.stringify(state, null, 2) + '\n');
   return state;
 }
@@ -129,6 +145,25 @@ function run() {
   });
 }
 
+function publish() {
+  const states = requirements.map(req =>
+    JSON.parse(fs.readFileSync(path.join(stateRoot, `${req.id}.json`), 'utf8')));
+  for (const state of states) {
+    git(['push', '-u', 'origin', state.branch], state.worktree);
+    const url = execFileSync('gh', [
+      'pr', 'create',
+      '--head', state.branch,
+      '--base', 'main',
+      '--title', `${state.requirement}: requirement change`,
+      '--body', `Harness verification: ${state.verification}\nCommit: ${state.commit}`
+    ], { cwd: root, encoding: 'utf8' }).trim();
+    state.pullRequest = url;
+    state.phase = 'pull-request-created';
+    fs.writeFileSync(path.join(stateRoot, `${state.requirement}.json`), JSON.stringify(state, null, 2) + '\n');
+    console.log(`${state.requirement}: ${url}`);
+  }
+}
+
 const action = process.argv[2];
 if (action === 'prepare') {
   prepare();
@@ -137,7 +172,14 @@ if (action === 'prepare') {
     console.error(error.message);
     process.exitCode = 1;
   });
+} else if (action === 'publish') {
+  try {
+    publish();
+  } catch (error) {
+    console.error(error.message);
+    process.exitCode = 1;
+  }
 } else {
-  console.error('Usage: node harness/run.js prepare|run');
+  console.error('Usage: node harness/run.js prepare|run|publish');
   process.exitCode = 1;
 }

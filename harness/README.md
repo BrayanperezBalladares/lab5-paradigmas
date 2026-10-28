@@ -23,6 +23,17 @@ node harness/run.js run
 The three worktrees are created under `.harness/worktrees/`. They are local
 branches and can be opened in three sessions independently.
 
+After verification, `run` commits the isolated change in each branch. If
+GitHub CLI is authenticated and the remote is configured, publish the three
+branches explicitly with:
+
+```powershell
+node harness/run.js publish
+```
+
+`publish` pushes branches and creates pull requests; it is intentionally not
+run as part of the local demo.
+
 The checked-in demo uses a tiny policy module as the Author output. Replace
 `redCommand`, `authorCommand`, and `testCommand` in `requirements.json` with
 OpenSpec/FoFo commands for a real agent run. They execute inside the
