@@ -63,8 +63,18 @@
 
         socket.on('Evento-Mensaje-Server', function(msg){
             var msgJson = JSON.parse(msg);
-            var mensajeDisplay = "<b style='color:"+ msgJson.color +"'>" + msgJson.nombre + "</b>: " + msgJson.mensaje;
-            $('#messages').append($('<li>').html(mensajeDisplay));
+            var sender = $('<b>').css('color', msgJson.color).text(msgJson.nombre);
+            var message = $('<li>').append(sender).append(document.createTextNode(': '));
+            var content = $.trim(msgJson.mensaje);
+
+            if ((msgJson.tipo === 'image' && content.indexOf('<img ') === 0) ||
+                (msgJson.tipo === 'video' && content.indexOf('<iframe ') === 0)) {
+                message.append($(content));
+            } else {
+                message.append(document.createTextNode(msgJson.mensaje));
+            }
+
+            $('#messages').append(message);
             window.scrollTo(0, document.body.scrollHeight);
         });
 

@@ -1,0 +1,29 @@
+[
+  {
+    "id": "REQ-010",
+    "slug": "empty-messages",
+    "title": "Empty messages are not published",
+    "acceptance": "WHEN a visitor activates Send with an empty or whitespace-only message THEN the system SHALL NOT add a message to the transcript, SHALL keep the message field empty, and SHALL tell the visitor to write something.",
+    "redCommand": "node harness/tests/REQ-010.test.js",
+    "authorCommand": "node harness/author.js REQ-010",
+    "testCommand": "node harness/tests/REQ-010.test.js"
+  },
+  {
+    "id": "REQ-011",
+    "slug": "required-name",
+    "title": "Messages need a name",
+    "acceptance": "WHEN a visitor activates Send with an empty or whitespace-only username and a real message THEN the system SHALL NOT add a message to the transcript, SHALL keep the username field empty, and SHALL tell the visitor to write a name.",
+    "redCommand": "node harness/tests/REQ-011.test.js",
+    "authorCommand": "node harness/author.js REQ-011",
+    "testCommand": "node harness/tests/REQ-011.test.js"
+  },
+  {
+    "id": "REQ-012",
+    "slug": "message-length",
+    "title": "Messages stay short",
+    "acceptance": "WHEN a visitor activates Send with a message longer than 280 characters THEN the system SHALL NOT add that message to the transcript, SHALL keep the message text in the field, and SHALL tell the visitor the message is too long.",
+    "redCommand": "node harness/tests/REQ-012.test.js",
+    "authorCommand": "node harness/author.js REQ-012",
+    "testCommand": "node harness/tests/REQ-012.test.js"
+  }
+]

@@ -22,44 +22,59 @@ module.exports = {
     },
   
     is_valid_url_image: function (url) {
-  
-      // inicializacion lazy
-      var isValid = false;
-      // expresion regular copiada de StackOverflow
-      var re = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png|jpeg|bmp)/i;
-  
-      // validacion Regex
-      try {
-        isValid = re.test(phone);
-      } catch (e) {
-        console.log(e);
-      } finally {
-          return isValid;
+      if (typeof url !== 'string') {
+        return false;
       }
-      // fin del try-catch block
+
+      try {
+        var parsedUrl = new URL(url);
+        return ['http:', 'https:'].includes(parsedUrl.protocol) &&
+          /\.(jpg|gif|png|jpeg|bmp)$/i.test(parsedUrl.pathname);
+      } catch (e) {
+        return false;
+      }
     },
   
     is_valid_yt_video: function (url) {
-  
-      // inicializacion lazy
-      var isValid = false;
-      // expresion regular copiada de StackOverflow
-      var re = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})?$/i;
-  
-      // validacion Regex
-      try {
-        isValid = re.test(phone);
-      } catch (e) {
-        console.log(e);
-      } finally {
-          return isValid;
+      if (typeof url !== 'string') {
+        return false;
       }
-      // fin del try-catch block
+
+      try {
+        var parsedUrl = new URL(url);
+        var hostname = parsedUrl.hostname.toLowerCase();
+        var videoId = '';
+
+        if (hostname === 'youtu.be') {
+          videoId = parsedUrl.pathname.slice(1);
+        } else if (hostname === 'youtube.com' || hostname === 'www.youtube.com') {
+          if (parsedUrl.pathname === '/watch') {
+            videoId = parsedUrl.searchParams.get('v') || '';
+          } else if (/^\/(embed|v)\/[^/]+$/.test(parsedUrl.pathname)) {
+            videoId = parsedUrl.pathname.split('/')[2];
+          }
+        }
+
+        return ['http:', 'https:'].includes(parsedUrl.protocol) &&
+          /^[A-Za-z0-9_-]{11}$/.test(videoId);
+      } catch (e) {
+        return false;
+      }
     },
   
     getYTVideoId: function(url){
-  
-      return url.match(/(?:https?:\/{2})?(?:w{3}\.)?youtu(?:be)?\.(?:com|be)(?:\/watch\?v=|\/)([^\s&]+)/)[1];
+      var parsedUrl = new URL(url);
+      var hostname = parsedUrl.hostname.toLowerCase();
+
+      if (hostname === 'youtu.be') {
+        return parsedUrl.pathname.slice(1);
+      }
+
+      if (parsedUrl.pathname === '/watch') {
+        return parsedUrl.searchParams.get('v');
+      }
+
+      return parsedUrl.pathname.split('/')[2];
     },
   
     getEmbeddedCode: function (url){
@@ -81,23 +96,26 @@ module.exports = {
 
       try {
         var obj = JSON.parse(msg);
-  
-      if(this.is_valid_url_image(obj.mensaje)){
-        console.log("Es una imagen!")
-        obj.mensaje = this.getImageTag(obj.mensaje);
-      }
-      else if(this.is_valid_yt_video(obj.mensaje)){
-        console.log("Es un video!")
-        obj.mensaje = this.getEmbeddedCode(obj.mensaje);
-      }
-      else{
-        console.log("Es un texto!")
-      }
-      
-      return JSON.stringify(obj);
+
+        if (!obj || typeof obj !== 'object' || Array.isArray(obj) ||
+          typeof obj.mensaje !== 'string') {
+          return JSON.stringify({ mensaje: '', tipo: 'text' });
+        }
+
+        if (this.is_valid_url_image(obj.mensaje)) {
+          obj.tipo = 'image';
+          obj.mensaje = this.getImageTag(obj.mensaje);
+        } else if (this.is_valid_yt_video(obj.mensaje)) {
+          obj.tipo = 'video';
+          obj.mensaje = this.getEmbeddedCode(obj.mensaje);
+        } else {
+          obj.tipo = 'text';
+        }
+
+        return JSON.stringify(obj);
       } catch (e) {
-        console.log('Error processing message:', e);
-        return JSON.stringify({ mensaje: msg }); // Return original message on error
+        console.log('Error processing message:', e.message);
+        return JSON.stringify({ mensaje: '', tipo: 'text' });
       }
     }
   
