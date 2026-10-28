@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "test": "mocha",
-    "test:e2e": "playwright test --project=chromium"
+    "test:e2e": "playwright test --project=chromium",
+    "verify:delivery": "node harness/verify.js"
   },
   "devDependencies": {
     "@playwright/test": "^1.64.1",

@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agentic SDLC // harness demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="stage" aria-live="polite">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">◈</span> AGENTIC SDLC <span class="slash">//</span> DEMO</div>
+      <div class="live"><span class="live-dot"></span> RECORDED RUN</div>
+    </header>
+
+    <section class="scene scene-title active" data-scene="0">
+      <p class="eyebrow">LAB 5 · PARADIGMAS DE PROGRAMACIÓN</p>
+      <h1>How do we know<br><em>tests deserve trust?</em></h1>
+      <p class="lede">A visual run of OpenSpec + FoFo principles<br>over three independent requirements.</p>
+      <div class="title-line"></div>
+    </section>
+
+    <section class="scene scene-requirements" data-scene="1">
+      <div class="scene-heading">
+        <p class="eyebrow">INPUT / CONTRACT</p>
+        <h2>Three requirements.<br><em>One coordinated run.</em></h2>
+      </div>
+      <div class="req-grid">
+        <article class="req-card req-a"><span class="req-id">REQ-010</span><strong>Empty messages</strong><small>NOT published</small><span class="req-check">↗</span></article>
+        <article class="req-card req-b"><span class="req-id">REQ-011</span><strong>Name required</strong><small>Before sending</small><span class="req-check">↗</span></article>
+        <article class="req-card req-c"><span class="req-id">REQ-012</span><strong>280 characters</strong><small>Maximum length</small><span class="req-check">↗</span></article>
+      </div>
+    </section>
+
+    <section class="scene scene-isolation" data-scene="2">
+      <div class="scene-heading">
+        <p class="eyebrow">GIT ISOLATION</p>
+        <h2>Same repository.<br><em>Three safe lanes.</em></h2>
+      </div>
+      <div class="lanes">
+        <div class="lane"><span class="lane-dot"></span><div><b>empty-messages</b><small>harness/req-010-empty-messages</small></div><i>WORKTREE 01</i></div>
+        <div class="lane"><span class="lane-dot"></span><div><b>required-name</b><small>harness/req-011-required-name</small></div><i>WORKTREE 02</i></div>
+        <div class="lane"><span class="lane-dot"></span><div><b>message-length</b><small>harness/req-012-message-length</small></div><i>WORKTREE 03</i></div>
+      </div>
+      <div class="isolation-note"><span>●</span> no shared untracked working directory</div>
+    </section>
+
+    <section class="scene scene-cycle" data-scene="3">
+      <div class="scene-heading">
+        <p class="eyebrow">THE INTEGRITY LOOP</p>
+        <h2>Red first.<br><em>Green earned.</em></h2>
+      </div>
+      <div class="cycle">
+        <div class="cycle-step red"><span>01</span><b>JUDGE</b><small>test fails</small></div>
+        <div class="arrow">→</div>
+        <div class="cycle-step author"><span>02</span><b>AUTHOR</b><small>implements</small></div>
+        <div class="arrow">→</div>
+        <div class="cycle-step green"><span>03</span><b>REFEREE</b><small>test passes</small></div>
+      </div>
+      <div class="terminal"><span class="terminal-dot"></span><span class="terminal-dot"></span><span class="terminal-dot"></span><code>$ node harness/run.js run</code><strong>failures: []</strong></div>
+    </section>
+
+    <section class="scene scene-results" data-scene="4">
+      <div class="scene-heading">
+        <p class="eyebrow">VERIFIED OUTPUT</p>
+        <h2>Nothing is hidden<br><em>behind “it passed”.</em></h2>
+      </div>
+      <div class="result-list">
+        <div><span class="status">PASS</span><b>REQ-010</b><code>10c68c0</code><small>committed</small></div>
+        <div><span class="status">PASS</span><b>REQ-011</b><code>bbe19bf</code><small>committed</small></div>
+        <div><span class="status">PASS</span><b>REQ-012</b><code>7578d5a</code><small>committed</small></div>
+      </div>
+      <div class="metrics"><div><strong>3</strong><span>worktrees</span></div><div><strong>3</strong><span>commits</span></div><div><strong>0</strong><span>failures</span></div></div>
+    </section>
+
+    <section class="scene scene-end" data-scene="5">
+      <p class="eyebrow">THE TAKEAWAY</p>
+      <h2>Trust is a<br><em>workflow.</em></h2>
+      <p class="lede">OpenSpec defines the contract.<br>FoFo challenges the test.<br>The harness coordinates the proof.</p>
+      <div class="final-pill">READY FOR REVIEW <span>↗</span></div>
+    </section>
+
+    <footer class="controls">
+      <button id="play" type="button" aria-label="Play or pause animation">Pause</button>
+      <button id="restart" type="button">Restart</button>
+      <div class="progress"><span id="progress"></span></div>
+      <span id="scene-label">01 / 06</span>
+    </footer>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

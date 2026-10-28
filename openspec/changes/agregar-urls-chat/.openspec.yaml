@@ -1,0 +1,4 @@
+schema: spec-driven
+created: 2026-10-21
+goal: Implementar el punto 4 del Lab 5 sin adelantar la sanitización completa
+  del punto 5.

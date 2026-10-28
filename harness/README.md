@@ -20,6 +20,12 @@ node harness/run.js prepare
 node harness/run.js run
 ```
 
+To verify the project suites and the persisted harness state together:
+
+```powershell
+npm run verify:delivery
+```
+
 The three worktrees are created under `.harness/worktrees/`. They are local
 branches and can be opened in three sessions independently.
 

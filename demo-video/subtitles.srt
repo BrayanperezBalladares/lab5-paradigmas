@@ -1,0 +1,44 @@
+﻿1
+00:00:00,400 --> 00:00:02,691
+¿Cómo sabemos que una prueba realmente merece confianza?
+
+2
+00:00:02,851 --> 00:00:06,415
+Este harness coordina tres requerimientos independientes usando principios de OpenSpec y FoFo.
+
+3
+00:00:06,575 --> 00:00:08,831
+El primer requisito evita publicar mensajes vacíos.
+
+4
+00:00:08,991 --> 00:00:11,127
+El segundo exige que cada mensaje tenga un nombre.
+
+5
+00:00:11,287 --> 00:00:13,850
+El tercero limita los mensajes a 280 caracteres.
+
+6
+00:00:14,010 --> 00:00:17,842
+Para evitar interferencias, cada requisito trabaja en su propio Git worktree y en su propia rama.
+
+7
+00:00:18,002 --> 00:00:21,553
+Primero actúa el Judge. La prueba debe fallar antes de que exista la implementación.
+
+8
+00:00:21,713 --> 00:00:23,877
+Después trabaja el Author dentro de su worktree aislado.
+
+9
+00:00:24,037 --> 00:00:27,304
+Finalmente, el Referee ejecuta la prueba nuevamente y confirma que ahora pasa.
+
+10
+00:00:27,464 --> 00:00:30,822
+El resultado está verificado: tres worktrees, tres commits y cero fallos.
+
+11
+00:00:30,982 --> 00:00:34,925
+OpenSpec define el contrato, FoFo cuestiona la calidad de la prueba y el harness coordina la evidencia.
+

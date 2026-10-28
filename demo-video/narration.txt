@@ -1,0 +1,21 @@
+¿Cómo sabemos que una prueba realmente merece confianza?
+
+Este harness coordina tres requerimientos independientes usando principios de OpenSpec y FoFo.
+
+El primer requisito evita publicar mensajes vacíos.
+
+El segundo exige que cada mensaje tenga un nombre.
+
+El tercero limita los mensajes a 280 caracteres.
+
+Para evitar interferencias, cada requisito trabaja en su propio Git worktree y en su propia rama.
+
+Primero actúa el Judge. La prueba debe fallar antes de que exista la implementación.
+
+Después trabaja el Author dentro de su worktree aislado.
+
+Finalmente, el Referee ejecuta la prueba nuevamente y confirma que ahora pasa.
+
+El resultado está verificado: tres worktrees, tres commits y cero fallos.
+
+OpenSpec define el contrato, FoFo cuestiona la calidad de la prueba y el harness coordina la evidencia.

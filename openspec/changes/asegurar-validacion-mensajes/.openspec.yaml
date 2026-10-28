@@ -1,0 +1,4 @@
+schema: spec-driven
+created: 2026-10-21
+goal: Implementar el punto 5 del Lab 5 con pruebas de seguridad antes de
+  corregir el código.
