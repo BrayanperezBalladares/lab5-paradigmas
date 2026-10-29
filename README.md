@@ -14,8 +14,8 @@ Auth0. El archivo `.env` está excluido de Git.
 ## Configurar Auth0
 
 1. Crea una aplicación **Regular Web Application** en Auth0.
-2. Habilita al menos un proveedor social, por ejemplo Google, en
-   **Authentication > Social**.
+2. Habilita al menos un proveedor social, por ejemplo Google, en la pestaña
+   **Connections** de la aplicación.
 3. En la aplicación Auth0 configura, usando el mismo origen local y el
    dominio de Vercel:
    - Allowed Callback URLs: `http://localhost:3000/callback` y
@@ -34,6 +34,19 @@ identidad se muestra en la cabecera y el enlace de cierre de sesión usa el
 flujo de logout de Auth0. Si Auth0 no está configurado, el servidor no inicia
 y muestra las variables faltantes.
 
+## Despliegue realizado
+
+- Repositorio: https://github.com/BrayanperezBalladares/lab5-paradigmas
+- Aplicación: https://lab5-paradigmas.vercel.app
+- Callback de producción:
+  `https://lab5-paradigmas.vercel.app/callback`
+- Logout y web origin de producción:
+  `https://lab5-paradigmas.vercel.app`
+
+Configura las variables de entorno en Vercel para Production, Preview y
+Development. En producción, `AUTH0_BASE_URL` debe ser
+`https://lab5-paradigmas.vercel.app`.
+
 ## Verificación
 
 ```powershell
@@ -42,6 +55,8 @@ npm run test:e2e
 npm run verify:delivery
 ```
 
-Las evidencias de login deben capturarse por separado en local y en Vercel
-después de configurar el proveedor social. No incluyas secretos en capturas,
-`.env.example` ni en el repositorio.
+La suite propia validada contiene 25 pruebas Mocha y 3 pruebas E2E. El
+verificador legado `verify:delivery` requiere ejecutar antes
+`node harness/run.js prepare`; ese flujo pertenece al harness del Laboratorio 5
+y no forma parte del alcance de este laboratorio. No incluyas secretos en
+capturas, `.env.example` ni en el repositorio.
