@@ -27,9 +27,23 @@ function authConfig() {
 
 function createServer(options) {
   options = options || {};
-  var app = require('express')();
+  var app = createApp(options);
   var http = require('http').Server(app);
   var io = require('socket.io')(http);
+
+  io.on('connection', function(socket){
+    socket.on('Evento-Mensaje-Server', function(msg){
+      msg = validation.validateMessage(msg);
+      io.emit('Evento-Mensaje-Server', msg);
+    });
+  });
+
+  return { app: app, http: http, io: io };
+}
+
+function createApp(options) {
+  options = options || {};
+  var app = require('express')();
   var authenticationRequired = options.requireAuth === true;
 
   if (authenticationRequired) {
@@ -47,14 +61,7 @@ function createServer(options) {
     });
   });
 
-  io.on('connection', function(socket){
-    socket.on('Evento-Mensaje-Server', function(msg){
-      msg = validation.validateMessage(msg);
-      io.emit('Evento-Mensaje-Server', msg);
-    });
-  });
-
-  return { app: app, http: http, io: io };
+  return app;
 }
 
 if (require.main === module) {
@@ -65,4 +72,6 @@ if (require.main === module) {
   });
 }
 
-module.exports = { createServer: createServer };
+var exportedApp = createApp({ requireAuth: process.env.VERCEL === '1' });
+exportedApp.createServer = createServer;
+module.exports = exportedApp;
