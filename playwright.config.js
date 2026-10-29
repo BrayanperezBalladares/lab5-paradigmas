@@ -12,7 +12,8 @@ module.exports = defineConfig({
     url: 'http://127.0.0.1:3012',
     reuseExistingServer: true,
     env: {
-      PORT: '3012'
+      PORT: '3012',
+      UNA_CHAT_TEST_AUTH: '1'
     }
   },
   projects: [
